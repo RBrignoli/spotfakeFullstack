@@ -25,7 +25,7 @@ const User = sequelize.define('user', {
         unique: true
     },
     dataNascimento: {
-        type: Sequelize.DataTypes.DATEONLY,
+        type: Sequelize.DataTypes.STRING,
         allowNull: false
     },
     senha: {
@@ -49,7 +49,6 @@ const criarTabelas = () => {
     sequelize.sync({ force: true }).then(() => {
         console.log('tabela criada')
     })
-
 }
 
 export { User, sequelize, criarTabelas };
