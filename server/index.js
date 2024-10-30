@@ -40,7 +40,7 @@ app.post('/login', async (req, res) => {
     }
     
     // comparar a senha do usuario com a senha salva no banco
-    // criar um token de autenticação para este usuario
+    // criar um token de asfagasf asd afg asgd asgd asdtwert para este usuario
     //retornar a mensagem com o token
     res.send('ok usuario logado')
 })
