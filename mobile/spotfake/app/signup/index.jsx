@@ -1,28 +1,30 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { View, Text, StyleSheet, TextInput, Image, Pressable } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable } from 'react-native'
 import { Link } from 'expo-router'
 import { LinearGradient } from 'expo-linear-gradient';
 
-
-export default login = () => {
+export default registro = () => {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-    const [mensagem, setMensagem] = useState('')
+    const [senha2, setSenha2] = useState('')
+    const [nome, setNome] = useState('')
+    const [sobrenome, setSobrenome] = useState('')
+    const [dataNasc, setDataNasc] = useState('')
+    const [senhaIgual, setSenhaIgual] = useState(false)
 
-
-    const handleLogin = async () => {
-        if (!email || !senha) {
-            setMensagem('Todos os campos devem ser preenchidos')
+    const handleSignUp = async () => {
+        if (!email || !senha || !nome || !sobrenome || !dataNasc) {
+            setMessage('Todos os campos devem ser preenchidos')
             return;
         }
         try {
-            const response = await fetch('http://localhost:8000/autenticacao/login', {
+            const response = await fetch('http://localhost:8000/autenticacao/registro', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email: email, senha: senha })
+                body: JSON.stringify({ email: email, senha: senha, nome:nome, sobrenome:sobrenome, dataNasc: dataNasc })
             });
             console.log(response)
             if (response.status === 200) {
@@ -36,18 +38,37 @@ export default login = () => {
             setMensagem('Error during signup. Please try again.');
         }
     };
+
+    const handleSenha = () => {
+        return
+    }
+
     return (
         <View style={styles.container}>
             <LinearGradient
                 colors={['chocolate', 'goldenrod']}
                 style={styles.background}
             />
-            <Image
-                style={styles.logo}
-                source={require('../assets/images/logo.png')}
-            />
-            <Text>Bem-vindo ao Spotfake</Text>
             <View style={styles.inputContainer}>
+                <Text> Faça parte do Spotfake </Text>
+                <TextInput
+                    placeholder='Insira seu nome'
+                    style={styles.inputTextBox}
+                    onChangeText={setNome}
+                    value={nome}
+                />
+                <TextInput
+                    placeholder='Insira seu sobrenome'
+                    style={styles.inputTextBox}
+                    onChangeText={setSobrenome}
+                    value={sobrenome}
+                />
+                <TextInput
+                    placeholder='Insira data de nascimento'
+                    style={styles.inputTextBox}
+                    onChangeText={setDataNasc}
+                    value={dataNasc}
+                />
                 <TextInput
                     placeholder='example@email.com'
                     style={styles.inputTextBox}
@@ -63,22 +84,24 @@ export default login = () => {
                     value={senha}
                     secureTextEntry={true}
                 />
-                <Pressable onPress={handleLogin} style={styles.buttonStyle}>
-                    <Text>Login</Text>
+                <TextInput
+                    placeholder='confirmar senha'
+                    style={styles.inputTextBox}
+                    secureTextEntry={true}
+                    value={senha2}
+                    onChange={handleSenha}
+                />
+                <Pressable onPress={handleSignUp} style={styles.buttonStyle}>
+                    <Text>Registre-se</Text>
                 </Pressable>
-                {mensagem ?
-                    <View>{mensagem}</View> :
-                    <View>
-                        <Text style={styles.textBox}>
-                            Ainda não possui uma conta?
-                        </Text>
-                        <Link href='/signup'>
-                            <Text style={styles.textBox}>
-                                Cadastre-se
-                            </Text>
-                        </Link>
-                    </View>
-                }
+                <Text style={styles.textBox}>
+                    Já possui uma conta?
+                </Text>
+                <Link href='../'>
+                    <Text style={styles.textBox}>
+                        Login
+                    </Text>
+                </Link>
             </View>
         </View>
     )
@@ -87,6 +110,7 @@ export default login = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'goldenrod',
         alignItems: 'center',
         justifyContent: 'space-evenly'
     },
@@ -100,22 +124,21 @@ const styles = StyleSheet.create({
         margin: 10,
         padding: 10,
         borderRadius: 10,
-        placeholderTextColor: 'lightgray',
-        width: '85%'
+        placeholderTextColor: 'lightgray'
     },
     textBox: {
         fontSize: 11,
-        marginTop: 10
+        marginTop:10
     },
     inputContainer: {
         alignItems: 'center'
     },
-    buttonStyle: {
+    buttonStyle:{
         backgroundColor: 'rgb(255, 135, 46)',
-        padding: 10,
-        width: '85%',
-        alignItems: 'center',
-        borderRadius: 10,
+        padding:10,
+        width:'85%',
+        alignItems:'center',
+        borderRadius:10,
     },
     background: {
         position: 'absolute',

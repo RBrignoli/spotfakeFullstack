@@ -21,6 +21,7 @@ const registro = async (req, res) => {
 }
 
 const login = async (req, res) => {
+    console.log(req)
     const { email, senha } = req.body
     if (!email || !senha) {
         res.send('voce deve preencher todos os campos')
@@ -28,12 +29,12 @@ const login = async (req, res) => {
     }
     const userExiste = await User.findOne({ where: { email: email } })
     if (!userExiste) {
-        res.send('Este usuario nao existe')
+        res.status(404).send('Este usuario nao existe')
         return
     }
     const senhaValida = bcryptjs.compareSync(senha, userExiste.senha)
     if (!senhaValida){
-        res.send('senha invalida')
+        res.status(401).send('senha invalida')
         return
     }
     const token = jsonwebtoken.sign(
@@ -45,7 +46,7 @@ const login = async (req, res) => {
         'chavecriptografiajwt',
         {expiresIn: 1000*60*60*24*30}
     )
-    res.send({
+    res.send(200).send({
         msg: "ok usuario logado",
         tokenJWT: token
     })

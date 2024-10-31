@@ -10,7 +10,7 @@ app.use(cors())
 // criarTabelas()
 
 app.use('/autenticacao', rotas)
-app.use('/admin', rotas_users)
+app.use('/user', rotas_users)
 
 
 app.listen(8000)
