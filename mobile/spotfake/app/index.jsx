@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, Text, StyleSheet, TextInput, Image, Pressable } from 'react-native'
 import { Link } from 'expo-router'
-import { LinearGradient } from 'expo-linear-gradient';
+import { AppContext } from '../scripts/appContext';
+import { router } from 'expo-router'
 
 
 export default login = () => {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
     const [mensagem, setMensagem] = useState('')
+    const { userInfo, setUserInfo } = useContext(AppContext)
+
 
 
     const handleLogin = async () => {
@@ -25,8 +28,12 @@ export default login = () => {
                 body: JSON.stringify({ email: email, senha: senha })
             });
             console.log(response)
+            data = await response.json()
             if (response.status === 200) {
                 setMensagem('Signup successfully!');
+                setUserInfo(data.userInfo)
+                router.push('/profile')
+
             } else if (response.status === 409) {
                 setMensagem('Email already exists');
             } else {
@@ -38,10 +45,6 @@ export default login = () => {
     };
     return (
         <View style={styles.container}>
-            <LinearGradient
-                colors={['chocolate', 'goldenrod']}
-                style={styles.background}
-            />
             <Image
                 style={styles.logo}
                 source={require('../assets/images/logo.png')}

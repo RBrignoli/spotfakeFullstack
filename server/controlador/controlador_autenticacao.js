@@ -5,7 +5,6 @@ import jsonwebtoken from "jsonwebtoken"
 
 const registro = async (req, res) => {
     const { nome, sobrenome, email, senha, dataNascimento } = req.body
-    console.log(req.body)
     if (!nome || !sobrenome || !email || !senha || !dataNascimento) {
         res.send('voce deve preencher todos os campos')
         return
@@ -21,7 +20,6 @@ const registro = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    console.log(req)
     const { email, senha } = req.body
     if (!email || !senha) {
         res.send('voce deve preencher todos os campos')
@@ -46,9 +44,10 @@ const login = async (req, res) => {
         'chavecriptografiajwt',
         {expiresIn: 1000*60*60*24*30}
     )
-    res.send(200).send({
+    res.status(200).send({
         msg: "ok usuario logado",
-        tokenJWT: token
+        tokenJWT: token,
+        userInfo: userExiste
     })
 }
 

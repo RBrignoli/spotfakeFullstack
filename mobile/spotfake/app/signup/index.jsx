@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable } from 'react-native'
 import { Link } from 'expo-router'
-import { LinearGradient } from 'expo-linear-gradient';
 
 export default registro = () => {
     const [email, setEmail] = useState('')
@@ -9,11 +8,12 @@ export default registro = () => {
     const [senha2, setSenha2] = useState('')
     const [nome, setNome] = useState('')
     const [sobrenome, setSobrenome] = useState('')
-    const [dataNasc, setDataNasc] = useState('')
+    const [dataNascimento, setdataNascimento] = useState('')
     const [senhaIgual, setSenhaIgual] = useState(false)
+    const [mensagem, setMensagem] = useState('')
 
     const handleSignUp = async () => {
-        if (!email || !senha || !nome || !sobrenome || !dataNasc) {
+        if (!email || !senha || !nome || !sobrenome || !dataNascimento) {
             setMessage('Todos os campos devem ser preenchidos')
             return;
         }
@@ -24,7 +24,7 @@ export default registro = () => {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email: email, senha: senha, nome:nome, sobrenome:sobrenome, dataNasc: dataNasc })
+                body: JSON.stringify({ email: email, senha: senha, nome:nome, sobrenome:sobrenome, dataNascimento: dataNascimento })
             });
             console.log(response)
             if (response.status === 200) {
@@ -45,10 +45,6 @@ export default registro = () => {
 
     return (
         <View style={styles.container}>
-            <LinearGradient
-                colors={['chocolate', 'goldenrod']}
-                style={styles.background}
-            />
             <View style={styles.inputContainer}>
                 <Text> Faça parte do Spotfake </Text>
                 <TextInput
@@ -66,8 +62,8 @@ export default registro = () => {
                 <TextInput
                     placeholder='Insira data de nascimento'
                     style={styles.inputTextBox}
-                    onChangeText={setDataNasc}
-                    value={dataNasc}
+                    onChangeText={setdataNascimento}
+                    value={dataNascimento}
                 />
                 <TextInput
                     placeholder='example@email.com'
@@ -84,13 +80,13 @@ export default registro = () => {
                     value={senha}
                     secureTextEntry={true}
                 />
-                <TextInput
+                {/* <TextInput
                     placeholder='confirmar senha'
                     style={styles.inputTextBox}
                     secureTextEntry={true}
                     value={senha2}
                     onChange={handleSenha}
-                />
+                /> */}
                 <Pressable onPress={handleSignUp} style={styles.buttonStyle}>
                     <Text>Registre-se</Text>
                 </Pressable>
