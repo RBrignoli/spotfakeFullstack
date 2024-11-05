@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { View, Text, StyleSheet, TextInput, Image, ScrollView, Pressable } from 'react-native'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 
 export default registro = () => {
     const [email, setEmail] = useState('')
@@ -29,6 +29,7 @@ export default registro = () => {
             console.log(response)
             if (response.status === 200) {
                 setMensagem('Signup successfully!');
+                router.push('/')
             } else if (response.status === 409) {
                 setMensagem('Email already exists');
             } else {

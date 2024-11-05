@@ -27,13 +27,11 @@ export default login = () => {
                 },
                 body: JSON.stringify({ email: email, senha: senha })
             });
-            console.log(response)
             data = await response.json()
             if (response.status === 200) {
                 setMensagem('Signup successfully!');
                 setUserInfo(data.userInfo)
-                router.push('/profile')
-
+                {userInfo.status == 'active'? router.push('/profile'): router.push('/payment')}
             } else if (response.status === 409) {
                 setMensagem('Email already exists');
             } else {

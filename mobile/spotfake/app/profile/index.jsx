@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { StyleSheet, View, Text, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { AppContext } from '../../scripts/appContext';
 
 
@@ -12,14 +12,15 @@ export default profile = () => {
         <View style={styles.container}>
             {userInfo ?
                 <View>
-                    <Image
-                        style={styles.logo}
-                        source={{ uri: 'https://www.jet.ir/uploadFiles/avatar/noprofile.png' }}
-                    />
-                    <Text>Usuario</Text>
-                    <Text>Email</Text>
-                    <Text>Senha</Text>
-                    <Text>Status Pagamento</Text>
+                    <TouchableOpacity>
+                        <Image
+                            style={styles.logo}
+                            source={{ uri: 'https://www.jet.ir/uploadFiles/avatar/noprofile.png' }}
+                        />
+                    </TouchableOpacity>
+                    <Text>{userInfo.nome}</Text>
+                    <Text>{userInfo.email}</Text>
+                    <Text>{userInfo.status}</Text>
                 </View> :
                 <ActivityIndicator />
             }
