@@ -28,7 +28,7 @@ export default profile = () => {
             const data = {
                 "file": image,
                 "upload_preset": 'ml_default',
-                "name": 'teste' //nao funcionou
+                "name": 'teste', //nao funcionou
             }
             const res = await fetch('https://api.cloudinary.com/v1_1/drsblkw5n/upload', {
                 method: 'POST',
@@ -38,11 +38,29 @@ export default profile = () => {
                 body: JSON.stringify(data)
             });
             const result = await res.json();
-            console.log(result);
+            setImage(result.url)
+            saveNewImageURLonBackend(result)
         }
         catch (e) {
             console.log(e)
         }
+    }
+
+    const saveNewImageURLonBackend = async (result) => {
+        const response = await fetch(`http://localhost:8000/user/trocar-img/${userInfo.id}`, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ url:result.url })
+            });
+            data = await response.json()
+            if (data.status === 200) {
+                alert('Imagem atualizada com sucesso')
+                return
+            }
+            alert('Houve um erro ao atualizar a imagem')
     }
 
     return (
