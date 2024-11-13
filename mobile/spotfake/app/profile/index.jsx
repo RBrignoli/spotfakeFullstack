@@ -9,6 +9,12 @@ export default profile = () => {
     const [image, setImage] = useState('https://www.jet.ir/uploadFiles/avatar/noprofile.png');
     const [newImage, setNewImage] = useState(false)
 
+    useEffect(() => {
+        if (userInfo.profile_image) {
+            setImage(userInfo.profile_image)
+        }
+    }, [])
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -28,17 +34,23 @@ export default profile = () => {
             const data = {
                 "file": image,
                 "upload_preset": 'ml_default',
-                "name": 'teste', //nao funcionou
             }
+            // if(userInfo.profile_image){
+            //     const regex = /\/([a-zA-Z0-9]+)\.png$/;
+            //     const public_id = userInfo.profile_image.match(regex);
+            //     data['public_id'] = public_id[1]
+            //     data['invalidate'] = true
+            // }
             const res = await fetch('https://api.cloudinary.com/v1_1/drsblkw5n/upload', {
                 method: 'POST',
                 headers: {
                     'content-type': 'application/json'
-                  },
+                },
                 body: JSON.stringify(data)
             });
             const result = await res.json();
             setImage(result.url)
+            setUserInfo(...userInfo, { profile_image: result.url })
             saveNewImageURLonBackend(result)
         }
         catch (e) {
@@ -48,62 +60,147 @@ export default profile = () => {
 
     const saveNewImageURLonBackend = async (result) => {
         const response = await fetch(`http://localhost:8000/user/trocar-img/${userInfo.id}`, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ url:result.url })
-            });
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: result.url })
+        });
+        console.log(data)
+        if (response.status === 200) {
             data = await response.json()
-            if (data.status === 200) {
-                alert('Imagem atualizada com sucesso')
-                return
-            }
-            alert('Houve um erro ao atualizar a imagem')
+            alert('Imagem atualizada com sucesso')
+            return
+        }
+        alert('Houve um erro ao atualizar a imagem')
+    }
+
+    const handleChangePassword = () => {
+
     }
 
     return (
         <View style={styles.container}>
-            {userInfo ?
-                <View>
-                    <TouchableOpacity onPress={pickImage}>
-                        <Image
-                            style={styles.logo}
-                            source={{ uri: image }}
-                        />
-                    </TouchableOpacity>
-                    {newImage && <Pressable onPress={handleSendImage} style={styles.buttonStyle}>
-                        <Text>Change Image</Text>
-                    </Pressable> }
-                    <Text>{userInfo.nome}</Text>
-                    <Text>{userInfo.email}</Text>
-                    <Text>{userInfo.status}</Text>
-                </View> :
-                <ActivityIndicator />
-            }
 
+            <View style={styles.container2}>
+                {userInfo ? (
+                    <View style={styles.profileContainer}>
+                        <TouchableOpacity onPress={pickImage}>
+                            <Image
+                                style={styles.logo}
+                                source={{ uri: image }}
+                            />
+                        </TouchableOpacity>
+
+                        {newImage && (
+                            <Pressable onPress={handleSendImage} style={styles.changeImageButton}>
+                                <Text style={styles.changeImageText}>Change Image</Text>
+                            </Pressable>
+                        )}
+
+                        <View style={styles.userInfoContainer}>
+                            <Text style={styles.nameText}>{userInfo.nome}</Text>
+                            <Text style={styles.emailText}>{userInfo.email}</Text>
+                            <Text style={styles.statusText}>{userInfo.status}</Text>
+                        </View>
+                        <Pressable onPress={handleChangePassword} style={styles.changeImageButton}>
+                            <Text style={styles.changeImageText}>Trocar Senha</Text>
+                        </Pressable>
+                        <Pressable onPress={handleChangePassword} style={styles.changeImageButton2}>
+                            <Text style={styles.changeImageText2}>Cancelar Assinatura</Text>
+                        </Pressable>
+                    </View>
+
+                ) : (
+                    <ActivityIndicator size="large" color="#ff8746" />
+                )}
+            </View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-evenly'
+        justifyContent: 'center',
+        padding: 20,
+    },
+    container2: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#F7F7F7',
+        padding: 20,
+        height:'80%'
+    },
+    profileContainer: {
+        alignItems: 'center',
+        width: '100%',
+        paddingVertical: 30,
+        backgroundColor: '#fff',
+        borderRadius: 15,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 5,
+        padding: 20,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        maxWidth: 400,
     },
     logo: {
-        width: 100,
-        height: 100,
-        borderRadius: 20,
+        width: 120,
+        height: 120,
+        borderRadius: 60,
+        borderWidth: 3,
+        borderColor: '#FF8746',
+        marginBottom: 20,
     },
-    buttonStyle: {
-        backgroundColor: 'rgb(255, 135, 46)',
-        padding: 10,
-        width: '90%',
+    changeImageButton: {
+        backgroundColor: '#FF8746',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 12,
+        marginVertical: 15,
+    },
+    changeImageButton2: {
+        backgroundColor: '#F7F7F7',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 12,
+        marginVertical: 15,
+    },
+    changeImageText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    changeImageText2: {
+        color: '#FF8746',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    userInfoContainer: {
+        width: '100%',
         alignItems: 'center',
-        borderRadius: 10,
-    }
-})
+        marginTop: 20,
+    },
+    nameText: {
+        fontSize: 24,
+        fontWeight: '600',
+        color: '#333',
+        marginBottom: 5,
+    },
+    emailText: {
+        fontSize: 16,
+        color: '#777',
+        marginBottom: 5,
+    },
+    statusText: {
+        fontSize: 16,
+        color: '#999',
+    },
+});
 

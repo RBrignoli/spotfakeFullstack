@@ -89,7 +89,7 @@ export default registro = () => {
                     onChange={handleSenha}
                 /> */}
                 <Pressable onPress={handleSignUp} style={styles.buttonStyle}>
-                    <Text>Registre-se</Text>
+                    <Text style={styles.changeImageText}>Registre-se</Text>
                 </Pressable>
                 <Text style={styles.textBox}>
                     Já possui uma conta?
@@ -107,7 +107,6 @@ export default registro = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'goldenrod',
         alignItems: 'center',
         justifyContent: 'space-evenly'
     },
@@ -143,5 +142,10 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         height: '100%',
-    }
+    },
+    changeImageText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
 })

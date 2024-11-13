@@ -65,11 +65,12 @@ export default login = () => {
                     secureTextEntry={true}
                 />
                 <Pressable onPress={handleLogin} style={styles.buttonStyle}>
-                    <Text>Login</Text>
+                    <Text style={styles.changeImageText}>Login</Text>
                 </Pressable>
-                {mensagem ?
-                    <View>{mensagem}</View> :
-                    <View>
+                {mensagem &&
+                    <View>{mensagem}</View>
+                }
+                <View>
                         <Text style={styles.textBox}>
                             Ainda não possui uma conta?
                         </Text>
@@ -79,7 +80,6 @@ export default login = () => {
                             </Text>
                         </Link>
                     </View>
-                }
             </View>
         </View>
     )
@@ -124,5 +124,11 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         height: '100%',
-    }
+    },
+
+    changeImageText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
 })
