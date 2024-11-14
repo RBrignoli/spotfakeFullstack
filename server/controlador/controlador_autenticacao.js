@@ -51,4 +51,22 @@ const login = async (req, res) => {
     })
 }
 
-export { registro, login }
+const change_password = async(req, res) => {
+    const user_id = req.params.id
+    const nova_senha = req.body.novaSenha
+    if (!nova_senha) {
+        res.status(400).send('Todos os campos devem ser preenchidos')
+        return
+    }
+    const user = await User.findOne({where:{id: user_id}})
+    if(!user){
+        res.status(404).send('User Not Found')
+        return
+    }
+    const senhaCriptografada = bcryptjs.hashSync(nova_senha, 10)
+    user.senha = senhaCriptografada
+    await user.save()
+    res.status(200).send(user)
+}
+
+export { registro, login, change_password }

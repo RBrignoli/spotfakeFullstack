@@ -1,12 +1,11 @@
 import express from 'express'
-import {registro, login} from '../controlador/controlador_autenticacao.js'
-import multer from 'multer'
+import {registro, login, change_password} from '../controlador/controlador_autenticacao.js'
 
-const upload = multer({ dest: 'uploads/' })
 
 const rotas = express.Router()
 
 rotas.post('/registro', registro)
-rotas.post('/login', upload.single('file'), login)
+rotas.post('/login', login)
+rotas.put('/change-password/:id', change_password)
 
 export { rotas }
