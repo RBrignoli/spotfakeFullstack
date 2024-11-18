@@ -16,7 +16,7 @@ const pegarArtistaPorId = async (req, res) => {
       include: [{
         model: Album,
         as: 'Albums',
-        include: [{model: Musica, as: 'Musicas'}]  // Incluir músicas no álbum
+        include: [{model: Musica, as: 'Musicas'}] 
       }]
     });
     if (!artist) {
@@ -29,5 +29,19 @@ const pegarArtistaPorId = async (req, res) => {
   }
 };
 
+const pegarAlbumsPorArtista = async (req, res) => {
+  try {
+    const albums = await Album.findAll({where:{artista_id:req.params.id}}, {
+      include: [{model: Musica, as: 'Musicas'}]
+    });
+    if (!albums) {
+      return res.status(404).json({ error: 'Artista não encontrado' });
+    }
+    return res.status(200).json(albums);
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ error: 'Erro ao buscar artista' });
+  }
+};
 
-export {pegarTodosArtistas, pegarArtistaPorId}
+export {pegarTodosArtistas, pegarArtistaPorId, pegarAlbumsPorArtista}
