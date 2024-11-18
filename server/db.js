@@ -1,4 +1,4 @@
-import Sequelize, { DataTypes } from 'sequelize'
+import Sequelize from 'sequelize'
 
 const sequelize = new Sequelize(
     'spotfake',
@@ -43,67 +43,71 @@ const User = sequelize.define('user', {
     }
 })
 
-const Artista = sequelize.define('Artist', {
+const Artista = sequelize.define('artista', {
     nome: {
-        type: DataTypes.STRING,
+        type:Sequelize.DataTypes.STRING,
         allowNull: false,
     },
     bio: {
-        type: DataTypes.TEXT,
+        type:Sequelize.DataTypes.TEXT,
         allowNull: true,
     },
     imageUrl: {
-        type: DataTypes.STRING,
+        type:Sequelize.DataTypes.STRING,
         allowNull: true,
     }
 }, {
     tableName: 'artists',
 });
 
-// Definindo o modelo do Álbum
-const Album = sequelize.define('Album', {
+const Album = sequelize.define('album', {
     title: {
-        type: DataTypes.STRING,
+        type:Sequelize.DataTypes.STRING,
         allowNull: false,
     },
     releaseYear: {
-        type: DataTypes.INTEGER,
+        type:Sequelize.DataTypes.INTEGER,
         allowNull: false,
     },
     coverImageUrl: {
-        type: DataTypes.STRING,
+        type:Sequelize.DataTypes.STRING,
         allowNull: true,
     },
 }, {
     tableName: 'albums',
 });
 
-Album.belongsTo(Artista, {
-    foreignKey: 'artista_id',
-    onDelete: 'CASCADE',
-});
-Artista.hasMany(Album, {
-    foreignKey: 'artista_id',
-    as: 'Albums',
-});
-
-const Musica = sequelize.define('Musica', {
+const Musica = sequelize.define('musica', {
     titulo: {
-        type: DataTypes.STRING,
+        type:Sequelize.DataTypes.STRING,
         allowNull: false,
     },
     duracao: {
-        type: DataTypes.INTEGER,
+        type:Sequelize.DataTypes.INTEGER,
         allowNull: false,
     },
     fileUrl: {
-        type: DataTypes.STRING,
+        type:Sequelize.DataTypes.STRING,
         allowNull: false,
     },
 }, {
     tableName: 'musicas',
 });
 
+//relacionamentos
+
+Album.belongsTo(Artista, {
+    foreignKey: 'artista_id',
+    onDelete: 'CASCADE',
+});
+Album.hasMany(Musica, {
+    foreignKey: 'album_id',
+    as: 'Musicas',
+});
+Artista.hasMany(Album, {
+    foreignKey: 'artista_id',
+    as: 'Albums',
+});
 Musica.belongsTo(Album, {
     foreignKey: 'album_id',
     onDelete: 'CASCADE',
@@ -111,10 +115,6 @@ Musica.belongsTo(Album, {
 Musica.belongsTo(Artista, {
     foreignKey: 'artista_id',
     onDelete: 'CASCADE',
-});
-Album.hasMany(Musica, {
-    foreignKey: 'album_id',
-    as: 'Musicas',
 });
 
 const criarTabelas = () => {
