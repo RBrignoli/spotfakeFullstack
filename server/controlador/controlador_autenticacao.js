@@ -15,7 +15,7 @@ const registro = async (req, res) => {
         return
     }
     const senhaCriptografada = bcryptjs.hashSync(senha, 10)
-    const teste = await User.create({ nome, sobrenome, email, senha: senhaCriptografada, dataNascimento })
+    const teste = await User.create({ nome, sobrenome, email, senha: senhaCriptografada, dataNasc: dataNascimento })
     res.send('ok usuario criado')
 }
 

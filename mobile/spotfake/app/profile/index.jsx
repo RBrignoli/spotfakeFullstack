@@ -192,8 +192,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-        color:'F7F7F7',
-        zIndex:10
+        backgroundColor:'F7F7F7'
     },
     container: {
         flex: 1,
