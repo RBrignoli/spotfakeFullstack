@@ -5,13 +5,13 @@ dotenv.config()
 
 
 const sequelize = new Sequelize(
-    process.env.DBHOST,
+    process.env.DBNAME,
     process.env.DBUSERNAME,
     process.env.DBPASSWORD,
     {
         dialect:'postgres',
-        database:process.env.DBNAME,
-        port:process.env.DBPORT
+        port:process.env.DBPORT,
+        host:process.env.DBHOST,
     }
 )
 
