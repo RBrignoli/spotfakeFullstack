@@ -1,15 +1,30 @@
 import Sequelize from 'sequelize'
+import { PostgresDialect } from '@sequelize/postgres';
+import dotenv from 'dotenv'
+dotenv.config()
 
-const sequelize = new Sequelize(
-    'spotfake',
-    'postgres',
-    'postgres',
-    {
-        host: 'localhost',
-        port: 5432,
-        dialect: 'postgres'
-    }
-)
+
+
+const sequelize = new Sequelize({
+    dialect:'postgres', 
+    database: process.env.DBNAME,
+    user: process.env.DBUSER,
+    password: process.env.DBPASSWORD,
+    host: process.env.DBHOST,
+    port: 5432,
+    connectionTimeoutMillis: 60000
+})
+
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('DB connection established successfully')
+    })
+    .catch(err => {
+        console.log('Unable to connect to DB', err);
+    });
+
+
 const User = sequelize.define('user', {
     nome: {
         type: Sequelize.DataTypes.STRING,
