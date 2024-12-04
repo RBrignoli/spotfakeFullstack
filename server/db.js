@@ -1,6 +1,5 @@
 import Sequelize from 'sequelize'
 import dotenv from 'dotenv'
-import { change_password } from './controlador/controlador_autenticacao';
 dotenv.config()
 
 
