@@ -1,19 +1,20 @@
 import Sequelize from 'sequelize'
-import { PostgresDialect } from '@sequelize/postgres';
 import dotenv from 'dotenv'
+import { change_password } from './controlador/controlador_autenticacao';
 dotenv.config()
 
 
 
-const sequelize = new Sequelize({
-    dialect:'postgres', 
-    database: process.env.DBNAME,
-    user: process.env.DBUSERNAME,
-    password: process.env.DBPASSWORD,
-    host: process.env.DBHOST,
-    port: 5432,
-    connectionTimeoutMillis: 60000
-})
+const sequelize = new Sequelize(
+    process.env.DBHOST,
+    process.env.DBUSERNAME,
+    process.env.DBPASSWORD,
+    {
+        dialect:'postgres',
+        database:process.env.DBNAME,
+        port:process.env.DBPORT
+    }
+)
 
 sequelize
     .authenticate()
